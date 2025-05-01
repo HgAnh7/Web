@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+
+
+<html lang="vi">
+
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>🔍 Kiểm Tra IP 🔍</title>
+
+
+    <style>
+
+
+        body {
+
+
+            font-family: Arial, sans-serif;
+
+
+            background-color: #000;
+
+
+            color: #fff;
+
+
+            text-align: center;
+
+
+            margin: 0;
+
+
+            padding: 0;
+
+
+            overflow: hidden;
+
+
+            display: flex; /* Sử dụng flexbox để căn giữa theo chiều dọc */
+
+
+            justify-content: center; /* Căn giữa theo chiều ngang (nếu cần) */
+
+
+            align-items: center; /* Căn giữa theo chiều dọc */
+
+
+            min-height: 100vh; /* Đảm bảo body chiếm toàn bộ chiều cao viewport */
+
+
+        }
+
+
+        .container {
+
+
+            /* width: 50%; */
+
+
+            max-width: 600px; /* Giới hạn chiều rộng tối đa */
+
+
+            margin: 20px; /* Thêm margin xung quanh container */
+
+
+            background: rgba(255, 255, 255, 0.1);
+
+
+            padding: 30px; /* Tăng padding để có không gian bên trong */
+
+
+            border-radius: 10px;
+
+
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+
+        }
+
+
+        input {
+
+
+            width: calc(100% - 20px); /* Điều chỉnh chiều rộng để trừ đi padding */
+
+
+            padding: 12px; /* Tăng padding cho dễ nhìn */
+
+
+            margin: 10px 0;
+
+
+            border: 1px solid #fff;
+
+
+            border-radius: 5px;
+
+
+            background: rgba(255, 255, 255, 0.1);
+
+
+            color: #fff;
+
+
+            text-align: center;
+
+
+            font-size: 16px; /* Tăng kích thước phông chữ cho dễ đọc */
+
+
+        }
+
+
+        .check-btn {
+
+
+            position: relative;
+
+
+            display: block;
+
+
+            margin: 20px auto;
+
+
+            padding: 14px 24px; /* Tăng padding cho nút */
+
+
+            font-size: 18px; /* Tăng kích thước phông chữ nút */
+
+
+            font-weight: bold;
+
+
+            text-transform: uppercase;
+
+
+            color: white;
+
+
+            background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47ff00, #00ffcc, #2b65ff, #8000ff);
+
+
+            background-size: 300%;
+
+
+            border: none;
+
+
+            border-radius: 30px;
+
+
+            cursor: pointer;
+
+
+            transition: 0.3s;
+
+
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+
+            animation: bgMove 3s linear infinite;
+
+
+        }
+
+
+        #background-video {
+
+
+            position: fixed;
+
+
+            top: 0;
+
+
+            left: 0;
+
+
+            width: 101%;
+
+
+            height: 101%; /* Điều chỉnh để che phủ toàn bộ */
+
+
+            object-fit: cover;
+
+
+            z-index: -1;
+
+
+            opacity: 0.3; /* Điều chỉnh độ mờ */
+
+
+        }
+
+
+        .check-btn:before {
+
+
+            content: "";
+
+
+            position: absolute;
+
+
+            top: -5px;
+
+
+            left: -5px;
+
+
+            right: -5px;
+
+
+            bottom: -5px;
+
+
+            background: inherit;
+
+
+            filter: blur(10px);
+
+
+            opacity: 0.5;
+
+
+            z-index: -1;
+
+
+        }
+
+
+        @keyframes bgMove {
+
+
+            0% { background-position: 0%; }
+
+
+            100% { background-position: 100%; }
+
+
+        }
+
+
+        .check-btn:hover {
+
+
+            transform: scale(1.1);
+
+
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+
+
+        }
+
+
+        .info-display {
+
+
+            margin-top: 20px;
+
+
+            text-align: left;
+
+
+            background: rgba(255, 255, 255, 0.1);
+
+
+            padding: 15px; /* Tăng padding */
+
+
+            border-radius: 5px;
+
+
+            font-size: 16px; /* Tăng kích thước phông chữ */
+
+
+            line-height: 1.6; /* Tăng khoảng cách dòng */
+
+
+        }
+
+
+        .info-display p {
+
+
+            margin-bottom: 8px; /* Thêm khoảng cách giữa các đoạn thông tin */
+
+
+        }
+
+
+        .snowflake {
+
+
+            position: fixed;
+
+
+            top: -10px;
+
+
+            color: white;
+
+
+            font-size: 1em;
+
+
+            user-select: none;
+
+
+            z-index: 9999;
+
+
+            animation: fall linear infinite;
+
+
+        }
+
+
+        @keyframes fall {
+
+
+            to {
+
+
+                transform: translateY(100vh);
+
+
+            }
+
+
+        }
+
+
+    </style>
+
+
+</head>
+
+
+<body>
+
+
+    <video autoplay loop muted id="background-video">
+
+
+        <source src="xxx.mp4" type="video/mp4">
+
+
+        Trình duyệt của bạn không hỗ trợ video.
+
+
+    </video>
+
+
+    <div class="container">
+
+
+        <h2>🔍 Kiểm Tra IP 🔍</h2>
+
+
+        <input type="text" id="ipInput" placeholder="Nhập IP hoặc để trống để kiểm tra IP của bạn">
+
+
+        <button class="check-btn" onclick="checkIP()">Check IP</button>
+
+
+        <div id="output" class="info-display" style="display: none;"></div>
+
+
+    </div>
+
+
+
+
+
+    <script>
+
+
+        function checkIP() {
+
+
+            let ip = document.getElementById("ipInput").value || "";
+
+
+            let apiURL = `http://ip-api.com/json/${ip}?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,zip,lat,lon,timezone,offset,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query`;
+
+
+
+
+
+            document.getElementById("output").innerHTML = `<p>Đang tải thông tin IP...</p>`;
+
+
+            document.getElementById("output").style.display = "block";
+
+
+
+
+
+            fetch(apiURL)
+
+
+                .then(response => response.json())
+
+
+                .then(data => {
+
+
+                    if (data.status === "fail") {
+
+
+                        document.getElementById("output").innerHTML = `<p style="color: red;">Lỗi: ${data.message}</p>`;
+
+
+                    } else {
+
+
+                        document.getElementById("output").innerHTML = `
+
+
+                            <p><strong>🌍 Châu lục:</strong> ${data.continent} (${data.continentCode})</p>
+
+
+                            <p><strong>🏳 Quốc gia:</strong> ${data.country} (${data.countryCode})</p>
+
+
+                            <p><strong>📍 Vùng:</strong> ${data.regionName} (${data.region})</p>
+
+
+                            <p><strong>🏙 Thành phố:</strong> ${data.city}</p>
+
+
+                            <p><strong>📮 Mã Zip:</strong> ${data.zip}</p>
+
+
+                            <p><strong>📡 ISP:</strong> ${data.isp}</p>
+
+
+                            <p><strong>🔗 Tổ chức:</strong> ${data.org}</p>
+
+
+                            <p><strong>🖥 AS:</strong> ${data.as} (${data.asname})</p>
+
+
+                            <p><strong>🔍 Reverse DNS:</strong> ${data.reverse || "Không có thông tin"}</p>
+
+
+                            <p><strong>🕵️ Proxy:</strong> ${data.proxy ? "Có" : "Không"}</p>
+
+
+                            <p><strong>🏢 Hosting:</strong> ${data.hosting ? "Có" : "Không"}</p>
+
+
+                            <p><strong>📱 Di động:</strong> ${data.mobile ? "Có" : "Không"}</p>
+
+
+                            <p><strong>🕰 Múi giờ:</strong> ${data.timezone} (UTC ${data.offset / 3600})</p>
+
+
+                            <p><strong>💰 Tiền tệ:</strong> ${data.currency}</p>
+
+
+                        `;
+
+
+                    }
+
+
+                })
+
+
+                .catch(error => {
+
+
+                    document.getElementById("output").innerHTML = `<p style="color: red;">Lỗi khi lấy dữ liệu!</p>`;
+
+
+                    console.error("Error:", error);
+
+
+                });
+
+
+        }
+
+
+
+
+
+        function createSnowflake() {
+
+
+            const snowflake = document.createElement("div");
+
+
+            snowflake.classList.add("snowflake");
+
+
+            snowflake.innerHTML = "❄️";
+
+
+            document.body.appendChild(snowflake);
+
+
+
+
+
+            let size = Math.random() * 10 + 10;
+
+
+            let leftPosition = Math.random() * window.innerWidth;
+
+
+            let duration = Math.random() * 5 + 5;
+
+
+
+
+
+            snowflake.style.left = leftPosition + "px";
+
+
+            snowflake.style.fontSize = size + "px";
+
+
+            snowflake.style.animationDuration = duration + "s";
+
+
+            snowflake.style.opacity = Math.random(); // Thêm độ mờ ngẫu nhiên
+
+
+
+
+
+            setTimeout(() => {
+
+
+                snowflake.remove();
+
+
+            }, duration * 1000);
+
+
+        }
+
+
+
+
+
+        setInterval(createSnowflake, 150); // Điều chỉnh tần suất tạo tuyết
+
+
+    </script>
+
+
+
+
+
+</body>
+
+
+</html>
+
+
