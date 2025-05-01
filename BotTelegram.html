@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi tin nhắn/tệp lên Telegram</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gửi tin nhắn/tệp lên Telegram Group</h1>
+        <form id="telegramForm">
+            <div class="form-group">
+                <label for="botToken">Bot Token</label>
+                <input type="text" id="botToken" name="botToken" placeholder="Nhập bot token của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="chatId">Group Chat ID</label>
+                <input type="text" id="chatId" name="chatId" placeholder="Nhập Group Chat ID" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Text Message (tùy chọn)</label>
+                <textarea id="message" name="message" rows="4" placeholder="Nhập tin nhắn"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="photo">Send Photo (tùy chọn)</label>
+                <input type="file" id="photo" name="photo" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="file">Send File (tùy chọn)</label>
+                <input type="file" id="file" name="file">
+            </div>
+            <button type="submit">Gửi lên Telegram</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('telegramForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const botToken = document.getElementById('botToken').value;
+            const chatId = document.getElementById('chatId').value;
+            const message = document.getElementById('message').value;
+            const photo = document.getElementById('photo').files[0];
+            const file = document.getElementById('file').files[0];
+
+            const apiUrlSendMessage = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            const apiUrlSendPhoto = `https://api.telegram.org/bot${botToken}/sendPhoto`;
+            const apiUrlSendDocument = `https://api.telegram.org/bot${botToken}/sendDocument`;
+
+            if (message) {
+                fetch(apiUrlSendMessage, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert('Tin nhắn văn bản đã được gửi!');
+                    } else {
+                        alert(`Lỗi gửi tin nhắn văn bản: ${data.description}`);
+                        console.error('Telegram API Error (Text):', data);
+                    }
+                })
+                .catch(error => {
+                    alert(`Lỗi mạng khi gửi tin nhắn văn bản: ${error.message}`);
+                    console.error('Fetch Error (Text):', error);
+                });
+            }
+
+            if (photo) {
+                const formDataPhoto = new FormData();
+                formDataPhoto.append('chat_id', chatId);
+                formDataPhoto.append('photo', photo);
+
+                fetch(apiUrlSendPhoto, {
+                    method: 'POST',
+                    body: formDataPhoto
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert('Ảnh đã được gửi!');
+                    } else {
+                        alert(`Lỗi gửi ảnh: ${data.description}`);
+                        console.error('Telegram API Error (Photo):', data);
+                    }
+                })
+                .catch(error => {
+                    alert(`Lỗi mạng khi gửi ảnh: ${error.message}`);
+                    console.error('Fetch Error (Photo):', error);
+                });
+            }
+
+            if (file) {
+                const formDataFile = new FormData();
+                formDataFile.append('chat_id', chatId);
+                formDataFile.append('document', file);
+
+                fetch(apiUrlSendDocument, {
+                    method: 'POST',
+                    body: formDataFile
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert('Tệp đã được gửi!');
+                    } else {
+                        alert(`Lỗi gửi tệp: ${data.description}`);
+                        console.error('Telegram API Error (File):', data);
+                    }
+                })
+                .catch(error => {
+                    alert(`Lỗi mạng khi gửi tệp: ${error.message}`);
+                    console.error('Fetch Error (File):', error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
