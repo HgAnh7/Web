@@ -2,11 +2,20 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Khóa khả năng zoom trên iOS -->
+  <meta name="viewport"
+        content="width=device-width,
+                 initial-scale=1.0,
+                 maximum-scale=1.0,
+                 user-scalable=no">
   <title>Gửi tin nhắn/tệp lên Telegram</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+    html {
+      /* Ngăn iOS tự động điều chỉnh cỡ chữ */
+      -webkit-text-size-adjust: 100%;
+    }
     body {
       background: #f5f7fa;
       margin: 0; padding: 0;
@@ -21,6 +30,15 @@
       width: 100%; max-width: 500px;
     }
     h1 { text-align: center; color: #333; margin-bottom: 25px; }
+
+    /* Đặt font-size tối thiểu 16px cho tất cả input, textarea, button */
+    input,
+    textarea,
+    button {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
     .form-group { margin-bottom: 20px; }
     label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
     input[type="text"],
@@ -33,9 +51,11 @@
     input:focus, textarea:focus { border-color: #007bff; outline: none; }
     textarea { resize: vertical; min-height: 80px; }
     button {
-      padding: 10px 16px; background: #007bff;
+      padding: 10px 16px;
+      background: #007bff;
       color: white; border: none; border-radius: 8px;
-      font-size: 14px; font-weight: bold; cursor: pointer;
+      font-size: 16px;
+      font-weight: bold; cursor: pointer;
       transition: background 0.3s; margin-top: 8px;
     }
     button:hover:enabled { background: #0056b3; }
