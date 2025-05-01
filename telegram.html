@@ -1,190 +1,265 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi tin nhắn/tệp lên Telegram</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        body {
-            background: #f5f7fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        input[type="text"],
-        input[type="file"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #fdfdfd;
-            transition: border 0.3s;
-        }
-
-        input[type="text"]:focus,
-        textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            border: none;
-            color: white;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:disabled {
-            background-color: #999;
-            cursor: not-allowed;
-        }
-
-        button:hover:enabled {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gửi tin nhắn/tệp lên Telegram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+    body {
+      background: #f5f7fa;
+      margin: 0; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 100%; max-width: 500px;
+    }
+    h1 { text-align: center; color: #333; margin-bottom: 25px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
+    input[type="text"],
+    input[type="file"],
+    textarea {
+      width: 100%; padding: 10px;
+      border: 1px solid #ccc; border-radius: 8px;
+      background: #fdfdfd; transition: border 0.3s;
+    }
+    input:focus, textarea:focus { border-color: #007bff; outline: none; }
+    textarea { resize: vertical; min-height: 80px; }
+    button {
+      padding: 10px 16px; background: #007bff;
+      color: white; border: none; border-radius: 8px;
+      font-size: 14px; font-weight: bold; cursor: pointer;
+      transition: background 0.3s; margin-top: 8px;
+    }
+    button:hover:enabled { background: #0056b3; }
+    button:disabled { background: #999; cursor: not-allowed; }
+    .file-clear { background: #dc3545 !important; display: none; margin-top: 8px; }
+    .file-clear:hover { background: #a71d2a !important; }
+    #submitBtn { width: 100%; margin-top: 20px; }
+    .preview-container img,
+    .preview-container video,
+    .preview-container audio {
+      margin-top: 10px;
+      max-width: 150px; max-height: 150px;
+      object-fit: cover; border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Gửi nội dung lên Telegram</h1>
-        <form id="telegramForm">
-            <div class="form-group">
-                <label for="botToken">Bot Token</label>
-                <input type="text" id="botToken" name="botToken" placeholder="Nhập Bot Token" required>
-            </div>
-            <div class="form-group">
-                <label for="chatId">Group Chat ID</label>
-                <input type="text" id="chatId" name="chatId" placeholder="Nhập Chat ID" required>
-            </div>
-            <div class="form-group">
-                <label for="message">Tin nhắn văn bản (tùy chọn)</label>
-                <textarea id="message" name="message" placeholder="Nhập tin nhắn"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="photo">Gửi ảnh (tùy chọn)</label>
-                <input type="file" id="photo" name="photo" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label for="file">Gửi tệp (tùy chọn)</label>
-                <input type="file" id="file" name="file">
-            </div>
-            <button type="submit" id="submitBtn">Gửi lên Telegram</button>
-        </form>
-    </div>
+  <div class="container">
+    <h1>Gửi nội dung lên Telegram</h1>
+    <form id="telegramForm">
+      <div class="form-group">
+        <label for="botToken">Bot Token</label>
+        <input type="text" id="botToken" required placeholder="Nhập Bot Token">
+      </div>
+      <div class="form-group">
+        <label for="chatId">Group Chat ID</label>
+        <input type="text" id="chatId" required placeholder="Nhập Chat ID">
+      </div>
+      <div class="form-group">
+        <label for="message">Tin nhắn văn bản (tùy chọn)</label>
+        <textarea id="message" placeholder="Nhập tin nhắn…"></textarea>
+      </div>
 
-    <script>
-        document.getElementById('telegramForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
+      <!-- Ảnh -->
+      <div class="form-group">
+        <label>Gửi ảnh (tối đa 10MB mỗi ảnh)</label>
+        <input type="file" id="photo" accept="image/*" multiple data-max-size="10485760">
+        <div id="photoPreview" class="preview-container"></div>
+        <button type="button" class="file-clear clear-btn" data-target="photo">Huỷ chọn</button>
+      </div>
 
-            const botToken = document.getElementById('botToken').value.trim();
-            const chatId = document.getElementById('chatId').value.trim();
-            const message = document.getElementById('message').value.trim();
-            const photo = document.getElementById('photo').files[0];
-            const file = document.getElementById('file').files[0];
-            const submitBtn = document.getElementById('submitBtn');
+      <!-- Video -->
+      <div class="form-group">
+        <label>Gửi video (tối đa 50MB)</label>
+        <input type="file" id="video" accept="video/*" data-max-size="52428800">
+        <div id="videoPreview" class="preview-container"></div>
+        <button type="button" class="file-clear clear-btn" data-target="video">Huỷ chọn</button>
+      </div>
 
-            const apiUrlSendMessage = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            const apiUrlSendPhoto = `https://api.telegram.org/bot${botToken}/sendPhoto`;
-            const apiUrlSendDocument = `https://api.telegram.org/bot${botToken}/sendDocument`;
+      <!-- Audio -->
+      <div class="form-group">
+        <label>Gửi audio (tối đa 10MB)</label>
+        <input type="file" id="audio" accept="audio/*" data-max-size="10485760">
+        <div id="audioPreview" class="preview-container"></div>
+        <button type="button" class="file-clear clear-btn" data-target="audio">Huỷ chọn</button>
+      </div>
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Đang gửi...';
+      <!-- Sticker -->
+      <div class="form-group">
+        <label>Gửi sticker (tối đa 1MB)</label>
+        <input type="file" id="sticker" accept="image/*" data-max-size="1048576">
+        <div id="stickerPreview" class="preview-container"></div>
+        <button type="button" class="file-clear clear-btn" data-target="sticker">Huỷ chọn</button>
+      </div>
 
-            try {
-                if (message) {
-                    const res = await fetch(apiUrlSendMessage, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: chatId, text: message })
-                    });
-                    const data = await res.json();
-                    if (data.ok) alert('✅ Tin nhắn đã được gửi!');
-                    else alert(`❌ Lỗi gửi tin nhắn: ${data.description}`);
-                }
+      <!-- Tệp -->
+      <div class="form-group">
+        <label>Gửi tệp (tối đa 50MB)</label>
+        <input type="file" id="file" data-max-size="52428800">
+        <div id="filePreview" class="preview-container"></div>
+        <button type="button" class="file-clear clear-btn" data-target="file">Huỷ chọn</button>
+      </div>
 
-                if (photo) {
-                    const formData = new FormData();
-                    formData.append('chat_id', chatId);
-                    formData.append('photo', photo);
+      <button type="submit" id="submitBtn">Gửi lên Telegram</button>
+    </form>
+  </div>
 
-                    const res = await fetch(apiUrlSendPhoto, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const data = await res.json();
-                    if (data.ok) alert('✅ Ảnh đã được gửi!');
-                    else alert(`❌ Lỗi gửi ảnh: ${data.description}`);
-                }
-
-                if (file) {
-                    const formData = new FormData();
-                    formData.append('chat_id', chatId);
-                    formData.append('document', file);
-
-                    const res = await fetch(apiUrlSendDocument, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const data = await res.json();
-                    if (data.ok) alert('✅ Tệp đã được gửi!');
-                    else alert(`❌ Lỗi gửi tệp: ${data.description}`);
-                }
-            } catch (error) {
-                alert(`❌ Lỗi mạng: ${error.message}`);
-                console.error('Network Error:', error);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Gửi lên Telegram';
+  <script>
+    // Kiểm tra dung lượng & loại MIME chung
+    function validateFiles(input) {
+      const maxSize = parseInt(input.dataset.maxSize, 10) || Infinity;
+      const accept = input.getAttribute('accept') || '';
+      for (let f of input.files) {
+        if (f.size > maxSize) {
+          alert(`❌ File "${f.name}" vượt quá ${maxSize/1048576} MB.`);
+          input.value = '';
+          return false;
+        }
+        if (accept) {
+          const types = accept.split(',');
+          const valid = types.some(t => {
+            if (t.endsWith('/*')) {
+              return f.type.startsWith(t.split('/')[0] + '/');
             }
-        });
-    </script>
+            return f.type === t;
+          });
+          if (!valid) {
+            alert(`❌ Định dạng không hợp lệ: ${f.name}`);
+            input.value = '';
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    // Preview
+    function previewImages(input, previewEl) {
+      if (!validateFiles(input)) return previewEl.innerHTML = '';
+      previewEl.innerHTML = '';
+      Array.from(input.files).forEach(file => {
+        const img = document.createElement('img');
+        const reader = new FileReader();
+        reader.onload = e => img.src = e.target.result;
+        reader.readAsDataURL(file);
+        previewEl.appendChild(img);
+      });
+    }
+    function previewSingle(input, previewEl, tag) {
+      if (!validateFiles(input)) return previewEl.innerHTML = '';
+      previewEl.innerHTML = '';
+      if (!input.files[0]) return;
+      const el = document.createElement(tag);
+      el.src = URL.createObjectURL(input.files[0]);
+      if (tag !== 'img') el.controls = true;
+      previewEl.appendChild(el);
+    }
+    function previewFileName(input, previewEl) {
+      if (!validateFiles(input)) return previewEl.innerHTML = '';
+      previewEl.innerHTML = '';
+      if (input.files[0]) {
+        const p = document.createElement('p');
+        p.textContent = input.files[0].name;
+        previewEl.appendChild(p);
+      }
+    }
+
+    const config = [
+      {id:'photo', fn: previewImages},
+      {id:'video', fn: (i,p)=>previewSingle(i,p,'video')},
+      {id:'audio', fn: (i,p)=>previewSingle(i,p,'audio')},
+      {id:'sticker', fn: (i,p)=>previewSingle(i,p,'img')},
+      {id:'file', fn: previewFileName}
+    ];
+    config.forEach(({id,fn}) => {
+      const inp = document.getElementById(id);
+      const prev = document.getElementById(id + 'Preview');
+      const btn = document.querySelector(`.clear-btn[data-target="${id}"]`);
+      inp.addEventListener('change', () => {
+        fn(inp, prev);
+        btn.style.display = inp.files.length ? 'inline-block' : 'none';
+      });
+      btn.addEventListener('click', () => {
+        inp.value = '';
+        prev.innerHTML = '';
+        btn.style.display = 'none';
+      });
+    });
+
+    // Gửi form với async/await và lỗi chi tiết
+    document.getElementById('telegramForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const token = document.getElementById('botToken').value.trim();
+      const chatId = document.getElementById('chatId').value.trim();
+      const msg    = document.getElementById('message').value.trim();
+      const btn    = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = 'Đang gửi...';
+
+      const successes = [];
+      const failures = [];
+
+      // Gửi tin nhắn văn bản
+      if (msg) {
+        try {
+          const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ chat_id: chatId, text: msg })
+          });
+          if (!res.ok) throw new Error(await res.text());
+          successes.push('Tin nhắn văn bản');
+        } catch (err) {
+          failures.push(`Tin nhắn văn bản: ${err.message}`);
+        }
+      }
+
+      // Gửi ảnh
+      const photos = document.getElementById('photo').files;
+      for (let i = 0; i < photos.length; i++) {
+        const f = photos[i];
+        try {
+          const fd = new FormData(); fd.append('chat_id', chatId); fd.append('photo', f);
+          const res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fd });
+          if (!res.ok) throw new Error(await res.text());
+          successes.push(`Ảnh #${i+1}`);
+        } catch (err) {
+          failures.push(`Ảnh #${i+1}: ${err.message}`);
+        }
+      }
+
+      // Gửi các loại khác
+      for (let type of ['video','audio','sticker','file']) {
+        const el = document.getElementById(type);
+        if (!el.files[0]) continue;
+        const f = el.files[0];
+        const field = type === 'file' ? 'document' : type;
+        try {
+          const fd = new FormData(); fd.append('chat_id', chatId); fd.append(field, f);
+          const method = `send${field.charAt(0).toUpperCase() + field.slice(1)}`;
+          const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, { method: 'POST', body: fd });
+          if (!res.ok) throw new Error(await res.text());
+          successes.push(field);
+        } catch (err) {
+          failures.push(`${type}: ${err.message}`);
+        }
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Gửi lên Telegram';
+      let summary = '';
+      if (successes.length) summary += `✅ Thành công: ${successes.join(', ')}.\n`;
+      if (failures.length) summary += `❌ Thất bại: ${failures.join(', ')}.`;
+      alert(summary || 'Không có nội dung để gửi.');
+    });
+  </script>
 </body>
 </html>
