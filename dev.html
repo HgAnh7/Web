@@ -10,6 +10,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: 'Inter', sans-serif; }
+    .tool-desc { display: none; }
+    .tool-desc.active { display: block; }
   </style>
 </head>
 <body class="bg-pink-50 text-gray-900">
@@ -26,16 +28,16 @@
     <!-- Liên hệ -->
     <h2 class="text-center text-pink-500 text-xl font-bold mb-5">Thông tin liên hệ</h2>
     <div class="space-y-3 max-w-md mx-auto">
-      <a href="https://www.facebook.com/VAnh3101" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+      <a href="https://www.facebook.com/VAnh3101" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
         <img src="dev/img/facebook.png" class="w-6 h-6 mr-2" alt="Facebook"> Facebook
       </a>
-      <a href="https://t.me/HgAnh_7" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+      <a href="https://t.me/HgAnh_7" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
         <img src="dev/img/telegram.png" class="w-6 h-6 mr-2" alt="Telegram"> Telegram Cá Nhân
       </a>
-      <a href="https://t.me/saveallfile" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+      <a href="https://t.me/saveallfile" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
         <img src="dev/img/telegram.png" class="w-6 h-6 mr-2" alt="Box Telegram"> Box Telegram
       </a>
-      <a href="https://tiktok.com/@HgAnh_7" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+      <a href="https://tiktok.com/@HgAnh_7" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
         <img src="dev/img/tiktok.png" class="w-6 h-6 mr-2" alt="TikTok"> TikTok
       </a>
     </div>
@@ -43,93 +45,104 @@
     <!-- Tool -->
     <h2 class="text-center text-pink-500 text-xl font-bold mt-6 mb-5">SHARE TOOL FREE</h2>
     <div class="space-y-3 max-w-md mx-auto">
-      <a href="dev/tool/" download="share_fb.py" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
-        <img src="dev/img/facebook.png"  class="w-6 h-6 mr-2"> Source tool buff share Facebook
-      </a>
+      <div>
+        <a href="dev/tool/share_fb.py" download class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+          <img src="dev/img/facebook.png" class="w-6 h-6 mr-2" alt="Facebook Tool"> Source tool buff share Facebook
+        </a>
+        <button onclick="toggleDesc('desc1')" class="mt-2 text-pink-600 text-sm underline">Xem mô tả</button>
+        <p id="desc1" class="tool-desc mt-2 text-gray-600 text-sm">Công cụ giúp tăng lượt chia sẻ bài viết trên Facebook bằng cách sử dụng API. Yêu cầu Python 3.11+, thư viện `requests`.</p>
+      </div>
 
-      <a href="dev/tool/" download="enjuly19.py" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
-        <img src="dev/img/python.png" class="w-6 h-6 mr-2"> Source tool mã hóa Python enjuly19
-      </a>
+      <div>
+        <a href="dev/tool/enjuly19.py" download class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+          <img src="dev/img/python.png" class="w-6 h-6 mr-2" alt="Python Tool"> Source tool mã hóa Python enjuly19
+        </a>
+        <button onclick="toggleDesc('desc2')" class="mt-2 text-pink-600 text-sm underline">Xem mô tả</button>
+        <p id="desc2" class="tool-desc mt-2 text-gray-600 text-sm">Công cụ mã hóa Python cơ bản, giúp bảo vệ mã nguồn. Hỗ trợ Python 3.11+, yêu cầu thư viện `pycryptodome`.</p>
+      </div>
 
-      <!-- <a href="https://link4m.com/" download="enjuly19.py" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
-        <img src="dev/img/python.png" class="w-6 h-6 mr-2"> Tool Buff Tim TikTok
-      </a> -->
+      <div>
+        <a href="dev/tool/melv2_311.py" download class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+          <img src="dev/img/python.png" class="w-6 h-6 mr-2" alt="Python Tool"> Tool mã hóa Python pymeov2-obfuscator 3.11
+        </a>
+        <button onclick="toggleDesc('desc3')" class="mt-2 text-pink-600 text-sm underline">Xem mô tả</button>
+        <p id="desc3" class="tool-desc mt-2 text-gray-600 text-sm">Công cụ mã hóa nâng cao cho Python 3.11, giúp che giấu mã nguồn. Yêu cầu thư viện `pyarmor`.</p>
+      </div>
 
-      <a href="dev/tool/" download="melv2_311.py" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
-        <img src="dev/img/python.png" class="w-6 h-6 mr-2"> Tool mã hóa Python pymeov2-obfuscator 3.11
-      </a>
+      <div>
+        <a href="dev/tool/melv2_312.py" download class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+          <img src="dev/img/python.png" class="w-6 h-6 mr-2" alt="Python Tool"> Tool mã hóa Python pymeov2-obfuscator 3.12
+        </a>
+        <button onclick="toggleDesc('desc4')" class="mt-2 text-pink-600 text-sm underline">Xem mô tả</button>
+        <p id="desc4" class="tool-desc mt-2 text-gray-600 text-sm">Phiên bản mã hóa cho Python 3.12, tương tự pymeov2-obfuscator 3.11. Yêu cầu thư viện `pyarmor`.</p>
+      </div>
 
-      <a href="dev/tool/" download="melv2_312.py" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
-        <img src="dev/img/python.png" class="w-6 h-6 mr-2"> Tool mã hóa Python pymeov2-obfuscator 3.12
-      </a>
-
-      <a href="dev/tool/" download="BrowserDataExtractor.py" class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
-        <img src="dev/img/python.png" class="w-6 h-6 mr-2"> Source Botnet
-      </a>
+      <div>
+        <a href="dev/tool/BrowserDataExtractor.py" download class="flex items-center gap-3 px-4 py-2 rounded-full bg-pink-300 hover:bg-pink-400 text-white font-medium shadow transition">
+          <img src="dev/img/python.png" class="w-6 h-6 mr-2" alt="Browser Data Extractor"> Browser Data Extractor
+        </a>
+        <button onclick="toggleDesc('desc5')" class="mt-2 text-pink-600 text-sm underline">Xem mô tả</button>
+        <p id="desc5" class="tool-desc mt-2 text-gray-600 text-sm">Công cụ nghiên cứu bảo mật, trích xuất dữ liệu trình duyệt (chỉ dùng cho mục đích hợp pháp). Yêu cầu Python 3.11+, thư viện `selenium`.</p>
+      </div>
     </div>
 
     <!-- Hướng dẫn Termux -->
     <h3 class="text-center text-gray-700 text-base font-semibold mt-8">📱 Android (Termux)</h3>
     <div class="bg-white p-4 rounded-lg shadow mt-3 text-sm leading-relaxed space-y-2">
       <p class="font-semibold text-pink-600">⚙️ Cài đặt thư viện Python:</p>
-      <p>Tải Termux tại: <a href="https://apkpure.com/vn/termux/com.termux/downloading/0.118.0" target="_blank" class="text-pink-600 underline">apkpure.com</a></p>
+      <p>Tải Termux tại: <a href="https://apkpure.com/vn/termux/com.termux/downloading/0.118.0" target="_blank" rel="noopener noreferrer" class="text-pink-600 underline">apkpure.com</a> hoặc <a href="https://f-droid.org/packages/com.termux/" target="_blank" rel="noopener noreferrer" class="text-pink-600 underline">f-droid.org</a></p>
       <p class="mt-2">Nhập các lệnh theo thứ tự:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">termux-setup-storage
-
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">termux-setup-storage
 apt update && apt upgrade
-
 pkg install python git php wget -y
-
 pip install --upgrade pip
-
 pip install requests pycurl bs4 colorama pystyle</pre>
 
       <p class="font-semibold text-pink-600 mt-3">🚀 Chạy tool:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">cd /sdcard/download/ python tênfile.py</pre>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">cd /sdcard/download/ && python tênfile.py</pre>
 
       <p class="font-semibold text-pink-600">😲 Nâng cao:</p>
       <p class="mt-2">Cách tải thư viện Python khi gặp lỗi ModuleNotFoundError:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">pip install 
-Thay bằng tên thư viện mà bạn cần cài đặt, ví dụ: requests, numpy, v.v.
-Ví dụ: pip install requests.</pre>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">pip install tên_thư_viện
+Thay 'tên_thư_viện' bằng tên thư viện cần cài, ví dụ: requests, numpy.</pre>
 
       <p class="mt-2">Cách tải thư viện JavaScript khi gặp lỗi:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">npm install 
-Thay  bằng tên gói JavaScript mà bạn cần cài đặt.
-Ví dụ: npm install express.</pre>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">npm install tên_gói
+Thay 'tên_gói' bằng tên gói cần cài, ví dụ: express.</pre>
 
-      <p class="mt-2">Lệnh nâng cấp Python 3.11 Lên 3.12:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">pkg install python --upgrade</pre>
+      <p class="mt-2">Lệnh nâng cấp Python 3.11 lên 3.12:</p>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">pkg install python --upgrade</pre>
 
       <p class="mt-2">Lệnh hạ cấp Python 3.12 xuống 3.11:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap break-all">pkg i tur-repo -y && pkg uninstall python -y && pkg uninstall python3.11 -y && pkg install python3.11 -y && mv -f /data/data/com.termux/files/usr/bin/python3.11 /data/data/com.termux/files/usr/bin/python</pre>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap break-all">pkg i tur-repo -y && pkg uninstall python -y && pkg uninstall python3.11 -y && pkg install python3.11 -y && mv -f /data/data/com.termux/files/usr/bin/python3.11 /data/data/com.termux/files/usr/bin/python</pre>
 
       <p class="mt-2">Cách chạy nhiều version python:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap break-all">pkg i tur-repo -y && pkg uninstall python -y && pkg uninstall python3.11 -y && pkg install python3.11 -y && mv -f /data/data/com.termux/files/usr/bin/python3.11 /data/data/com.termux/files/usr/bin/python</pre>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap break-all">pkg i tur-repo -y && pkg uninstall python -y && pkg uninstall python3.11 -y && pkg install python3.11 -y && mv -f /data/data/com.termux/files/usr/bin/python3.11 /data/data/com.termux/files/usr/bin/python</pre>
     </div>
 
     <!-- Hướng dẫn PC -->
     <h3 class="text-center text-gray-700 text-base font-semibold mt-8">🖥️ PC (Windows)</h3>
     <div class="bg-white p-4 rounded-lg shadow mt-3 text-sm leading-relaxed space-y-2">
       <p class="font-semibold text-pink-600">⚙️ Cài đặt thư viện Python:</p>
-      <p>Tải Python tại: <a href="https://www.python.org/downloads/release/python-3125/" target="_blank" class="text-pink-600 underline">python.org</a></p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">python --version
+      <p>Tải Python tại: <a href="https://www.python.org/downloads/release/python-3125/" target="_blank" rel="noopener noreferrer" class="text-pink-600 underline">python.org</a></p>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">python --version
 python -m pip install --upgrade pip
 pip install requests colorama bs4 beautifulsoup4 Anime pystyle selenium mechanize zlapi cryptography</pre>
 
       <p class="font-semibold text-pink-600">🚀 Chạy tool:</p>
-<pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">python tênfile.py</pre>
+      <pre class="bg-pink-100 p-2 rounded text-xs font-mono whitespace-pre-wrap">python tênfile.py</pre>
     </div>
   </div>
 
-  <style>
-    .btn-social {
-      @apply flex items-center justify-center gap-2 bg-pink-400 hover:bg-pink-500 text-white font-medium py-2 rounded-full shadow transition;
+  <script>
+    function toggleDesc(id) {
+      // Đóng tất cả mô tả đang mở
+      document.querySelectorAll('.tool-desc.active').forEach(el => {
+        if (el.id !== id) el.classList.remove('active');
+      });
+      // Toggle mô tả cho tool hiện tại
+      document.getElementById(id).classList.toggle('active');
     }
-    .btn-tool {
-      @apply flex items-center bg-white text-gray-800 hover:bg-pink-100 px-4 py-2 rounded-lg shadow transition;
-    }
-  </style>
-
+  </script>
 </body>
 </html>
