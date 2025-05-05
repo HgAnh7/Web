@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm Tra IP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #ffffff; /* Background màu trắng */
+            color: #4a4a4a;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            min-width: 300px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(255, 105, 180, 0.15), rgba(255, 182, 193, 0.1));
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.1);
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ff69b4;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ffb6c1;
+            border-radius: 8px;
+            background: rgba(255, 182, 193, 0.1);
+            color: #4a4a4a;
+            font-size: 1rem;
+            text-align: center;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #ff69b4;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+        }
+        .check-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
+            background: linear-gradient(45deg, #ff69b4, #ffb6c1, #e6e6fa);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.2);
+        }
+        .check-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .check-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 105, 180, 0.4);
+        }
+        .check-btn:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(255, 105, 180, 0.3);
+        }
+        .info-display {
+            margin-top: 20px;
+            text-align: left;
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(255, 105, 180, 0.15), rgba(255, 182, 193, 0.1));
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+            color: #4a4a4a;
+        }
+        .info-display.show {
+            display: block;
+        }
+        .loading {
+            font-size: 0.9rem;
+            color: #ff69b4;
+        }
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 1.5rem;
+            }
+            input {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+            .check-btn {
+                font-size: 0.9rem;
+                padding: 10px 25px;
+            }
+            .info-display {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔍 Kiểm Tra IP 🔍</h2>
+        <input type="text" id="ipInput" placeholder="Nhập IP hoặc để trống để kiểm tra IP của bạn" aria-label="Nhập địa chỉ IP">
+        <button class="check-btn" onclick="checkIP()" aria-label="Kiểm tra IP">Check IP</button>
+        <div id="output" class="info-display"></div>
+    </div>
+
+    <script>
+        function checkIP() {
+            const ipInput = document.getElementById("ipInput");
+            const output = document.getElementById("output");
+            const button = document.querySelector(".check-btn");
+
+            const isValidIP = /^(\d{1,3}\.){3}\d{1,3}$/.test(ipInput.value) || ipInput.value === "";
+            if (!isValidIP) {
+                output.innerHTML = `<p style="color: #ff69b4;">Vui lòng nhập IP hợp lệ!</p>`;
+                output.classList.add("show");
+                return;
+            }
+
+            button.disabled = true;
+            output.innerHTML = `<p class="loading">Đang tải...</p>`;
+            output.classList.add("show");
+
+            const ip = ipInput.value || "";
+            const apiURL = `http://ip-api.com/json/${ip}?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,zip,lat,lon,timezone,offset,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query`;
+
+            fetch(apiURL)
+                .then(response => response.json())
+                .then(data => {
+                    output.classList.add("show");
+                    button.disabled = false;
+                    if (data.status === "fail") {
+                        output.innerHTML = `<p style="color: #ff69b4;">Lỗi: ${data.message}</p>`;
+                    } else {
+                        output.innerHTML = `
+                            <p><strong>🌍 Châu lục:</strong> ${data.continent} (${data.continentCode})</p>
+                            <p><strong>🏳 Quốc gia:</strong> ${data.country} (${data.countryCode})</p>
+                            <p><strong>📍 Vùng:</strong> ${data.regionName} (${data.region})</p>
+                            <p><strong>🏙 Thành phố:</strong> ${data.city}</p>
+                            <p><strong>📮 Mã Zip:</strong> ${data.zip || "Không có"}</p>
+                            <p><strong>📡 ISP:</strong> ${data.isp}</p>
+                            <p><strong>🔗 Organization:</strong> ${data.org}</p>
+                            <p><strong>🖥 AS:</strong> ${data.as} (${data.asname})</p>
+                            <p><strong>🔍 Reverse DNS:</strong> ${data.reverse || "Không có"}</p>
+                            <p><strong>🕵 Proxy:</strong> ${data.proxy ? "Có" : "Không"}</p>
+                            <p><strong>🏢 Hosting:</strong> ${data.hosting ? "Có" : "Không"}</p>
+                            <p><strong>📱 Di động:</strong> ${data.mobile ? "Có" : "Không"}</p>
+                            <p><strong>🕰 Timezone:</strong> ${data.timezone} (UTC ${data.offset / 3600})</p>
+                            <p><strong>💰 Tiền tệ:</strong> ${data.currency}</p>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    output.innerHTML = `<p style="color: #ff69b4;">Lỗi khi lấy dữ liệu!</p>`;
+                    output.classList.add("show");
+                    button.disabled = false;
+                    console.error("Error:", error);
+                });
+        }
+
+        document.getElementById("ipInput").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") checkIP();
+        });
+    </script>
+</body>
+</html>
